@@ -1,7 +1,10 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Compile">
 	<ItemGroup>
 		<BuildDir Include="BuildDir\" />
+		<PackagesDir Include="Packages\" />
 		<SolutionFile Include="hwapp.sln" />
+		<MainProj Include="hwapp" />
+		<NuGet Include="nuget.exe" />
 	</ItemGroup>
 	<PropertyGroup>
 		<Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
@@ -9,11 +12,16 @@
 	</PropertyGroup>
 	<Target Name="Clean">
 		<RemoveDir Directories="@(BuildDir)" />
+		<RemoveDir Directories="@(PackagesDir)" />
 	</Target>
 	<Target Name="Init" DependsOnTargets="Clean">
 		<MakeDir Directories="@(BuildDir)" />
+		<MakeDir Directories="@(PackagesDir)" />
 	</Target>
-	<Target Name="Compile" DependsOnTargets="Init">
+	<Target Name="GetRef" DependsOnTargets="Init">
+		<Exec Command='"@(NuGet)" restore @(MainProj)\packages.config -PackagesDirectory packages' />
+	</Target>
+	<Target Name="Compile" DependsOnTargets="GetRef">
 		<MSBuild Projects="@(SolutionFile)"
 				 Targets="Rebuild"
 				 Properties="OutDir=%(BuildDir.FullPath);Configuration=$(Configuration);Platform=$(BuildPlatform)" />

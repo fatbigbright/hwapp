@@ -1,18 +1,23 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Compile">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="UnitTest">
 	<ItemGroup>
 		<BuildDir Include="BuildDir\" />
 		<PackagesDir Include="Packages\" />
+        <TestResultDir Include="TestResults\" />
 		<SolutionFile Include="hwapp.sln" />
 		<MainProj Include="hwapp" />
 		<NuGet Include="nuget.exe" />
+        <MSTest Include="C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\MSTest.exe" />
+        <UTFile Include="hwappUnitTest.dll" />
+        <!--<UTResult Include="UnitTestResult.trx" />-->
+        <PlainUTResult Include="UnitTestResult.txt" />
 	</ItemGroup>
 	<PropertyGroup>
 		<Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
 		<BuildPlatform Condition=" '$(BuildPlatform)' == '' ">Any CPU</BuildPlatform>
 	</PropertyGroup>
 	<Target Name="Clean">
-		<RemoveDir Directories="@(BuildDir)" />
-		<RemoveDir Directories="@(PackagesDir)" />
+		<RemoveDir Directories="@(BuildDir);@(PackagesDir);@(TestResultDir)" />
+        <Delete Files="@(UTResult);@(PlainUTResult)" />
 	</Target>
 	<Target Name="Init" DependsOnTargets="Clean">
 		<MakeDir Directories="@(BuildDir)" />
@@ -26,4 +31,7 @@
 				 Targets="Rebuild"
 				 Properties="OutDir=%(BuildDir.FullPath);Configuration=$(Configuration);Platform=$(BuildPlatform)" />
 	</Target>
+    <Target Name="UnitTest" DependsOnTargets="Compile">
+        <Exec Command='"@(MSTest)" /testcontainer:@(BuildDir)\@(UTFile) /nologo > @(PlainUTResult)' />
+    </Target>
 </Project>

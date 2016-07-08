@@ -12,10 +12,10 @@ namespace hwappLibUT
             Assert.IsTrue(true);
         }
 
-        [TestMethod]
-        public void FailedMethod() 
-        {
-            Assert.IsTrue(false);
-        }
+        //[TestMethod]
+        //public void FailedMethod() 
+        //{
+        //    Assert.IsTrue(false);
+        //}
     }
 }

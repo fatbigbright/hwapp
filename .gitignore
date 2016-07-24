@@ -1,0 +1,5 @@
+BuildDir
+bin
+packages
+obj
+*.csproj.user

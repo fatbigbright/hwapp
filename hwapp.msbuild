@@ -9,7 +9,6 @@
 		<NuGet Include="nuget.exe" />
         <MSTest Include="C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\MSTest.exe" />
         <UTFile Include="hwappUnitTest.dll" />
-        <!--<UTResult Include="UnitTestResult.trx" />-->
         <PlainUTResult Include="UnitTestResult.txt" />
 	</ItemGroup>
 	<PropertyGroup>
@@ -19,12 +18,11 @@
 	<Target Name="Clean">
 		<RemoveDir Directories="@(BuildDir);@(PackagesDir);@(TestResultDir)" />
         <Delete Files="@(PlainUTResult)" />
-		<RemoveDir Directories="@(PublishDir)" />
+		<Exec Command='del @(PublishDir)* /F /Q' />
 	</Target>
 	<Target Name="Init" DependsOnTargets="Clean">
 		<MakeDir Directories="@(BuildDir)" />
 		<MakeDir Directories="@(PackagesDir)" />
-		<MakeDir Directories="@(PublishDir)" />
 	</Target>
 	<Target Name="GetRef" DependsOnTargets="Init">
 		<Exec Command='"@(NuGet)" restore @(MainProj)\packages.config -PackagesDirectory packages' />
@@ -38,6 +36,6 @@
         <Exec Command='"@(MSTest)" /testcontainer:@(BuildDir)\@(UTFile) /nologo ' />
     </Target>
 	<Target Name="Deploy" DependsOnTargets="UnitTest">
-		<Exec Command='copy @(BuildDir)* @(PublishDir)*' />
+		<Exec Command='xcopy @(BuildDir)_PublishedWebsites\@(MainProj)\* @(PublishDir) /e /y' />
 	</Target>
 </Project>

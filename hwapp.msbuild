@@ -32,7 +32,7 @@
 				 Properties="OutDir=%(BuildDir.FullPath);Configuration=$(Configuration);Platform=$(BuildPlatform)" />
 	</Target>
     <Target Name="UnitTest" DependsOnTargets="Compile">
-        <Exec Command='"@(MSTest)" /testcontainer:@(BuildDir)\@(UTFile) /nologo > @(PlainUTResult)' />
+        <Exec Command='"@(MSTest)" /testcontainer:@(BuildDir)\@(UTFile) /nologo ' />
     </Target>
 	<Target Name="Final" DependsOnTargets="UnitTest">
 		<Exec Command='echo "All completed."' />

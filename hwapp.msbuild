@@ -1,4 +1,4 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="UnitTest">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Final">
 	<ItemGroup>
 		<BuildDir Include="BuildDir\" />
 		<PackagesDir Include="Packages\" />
@@ -34,4 +34,7 @@
     <Target Name="UnitTest" DependsOnTargets="Compile">
         <Exec Command='"@(MSTest)" /testcontainer:@(BuildDir)\@(UTFile) /nologo > @(PlainUTResult)' />
     </Target>
+	<Target Name="Final" DependsOnTargets="UnitTest">
+		<Exec Command='echo "All completed."' />
+	</Target>
 </Project>
